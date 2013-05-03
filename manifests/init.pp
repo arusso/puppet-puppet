@@ -22,16 +22,17 @@
 # modules.
 #
 class puppet (
+  $dns_alt_names = undef,
+  $manifest = undef,
   $master = undef,
   $modulepath = undef,
-  $manifest = undef,
-  $service = undef,
-  $dns_alt_names = undef,
-  $server = undef,
+  pluginsync = undef,
+  $reports = undef,
   $reportfrom = undef,
   $sendmail = undef,
-  $tagmap = undef,
-  $reports = undef
+  $server = undef,
+  $service = undef,
+  $tagmap = undef
 ) {
   # Agent installer
   include puppet::agent
@@ -43,6 +44,15 @@ class puppet (
     default => any2bool($master)
   }
   validate_bool( $master_r )
+
+  file { '/etc/puppet/puppet.conf':
+    ensure  => present,
+    mode    => '0440',
+    owner   => 'root',
+    group   => 'puppet',
+    content => "[main]\n[agent]",
+    replace => false,
+  }
 
   if $master_r {
     include puppet::master

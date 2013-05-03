@@ -1,0 +1,47 @@
+#!/bin/env sh
+
+ARG1=$1
+
+STATE_CONFIGURED=0
+STATE_UNCONFIGURED=1
+STATE_ENABLED=0
+STATE_DISABLED=1
+
+RC_ENABLED=0
+RC_CONFIGURED=1
+RC_UNCONFIGURED=2
+
+CONFIG_STATE=$STATE_UNCONFIGURED
+ENABLE_STATE=$STATE_DISABLED
+
+REGEX_CONFIGURED='^\s*pluginsync\s*=.*$'
+REGEX_ENABLED='^\s*pluginsync\s*=\s*true\s*$'
+
+### Get our current state
+#
+/bin/egrep $REGEX_CONFIGURED /etc//puppet/puppet.conf > /dev/null;
+CONFIG_STATE=$?
+
+if [ $CONFIG_STATE -eq $STATE_CONFIGURED ]; then
+    /bin/egrep $REGEX_ENABLED /etc//puppet/puppet.conf > /dev/null;
+      ENABLE_STATE=$?
+      fi
+
+### Either update the config, or update our return codes
+#
+if [ "$ARG1" == 'u' ]; then
+  if [ ! $CONFIG_STATE -eq $STATE_CONFIGURED ]; then
+    /bin/sed -i 's/\[agent\]/\[agent\]\n  pluginsync = true/g' /etc/puppet/puppet.conf
+  elif [ ! $ENABLE_STATE -eq $STATE_ENABLED ]; then
+    /bin/sed -i 's/pluginsync\s*=.*$/pluginsync = true/g' /etc/puppet/puppet.conf
+  fi
+else
+  # just return state
+  if [ $ENABLE_STATE -eq $STATE_ENABLED ]; then
+    exit $RC_ENABLED
+  elif [ $CONFIG_STATE -eq $STATE_CONFIGURED ]; then
+    exit $RC_CONFIGURED
+  else
+    exit $RC_UNCONFIGURED
+  fi
+fi

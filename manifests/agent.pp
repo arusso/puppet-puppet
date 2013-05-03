@@ -14,9 +14,18 @@ class puppet::agent {
     notify  => $service_notify,
     #notify  => Class['puppet::agent::service'],
   }
-  ini_setting { 'puppet-agent-pluginsync':
-    setting => 'pluginsync',
-    value   => 'true',
+
+  case $pluginsync {
+    true,'true': { $pluginsync_r = 'true' }
+    false,'false': { $pluginsync_r = 'false' }
+    default: { $pluginsync_r = undef }
+  }
+
+  if $pluginsync_r {
+    ini_setting { 'puppet-agent-pluginsync':
+      setting => 'pluginsync',
+      value   => $pluginsync_r,
+    }
   }
   ini_setting { 'puppet-agent-report':
     setting => 'report',
