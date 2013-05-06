@@ -1,3 +1,7 @@
+# == Class: puppet::agent
+#
+# Manages the puppet agent
+#
 class puppet::agent {
   include puppet::agent::package, puppet::agent::service
 

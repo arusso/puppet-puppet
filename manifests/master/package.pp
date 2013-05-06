@@ -1,9 +1,7 @@
 # == Class: puppet::master::package
+#
 # Installs the puppet master package
-# == Dependencies:
-# === Classes:
-#   puppet::agent::service
-#   
+#
 class puppet::master::package {
   $package_r = 'puppet-server'
   # we should ensure this gets installed before the puppet agent

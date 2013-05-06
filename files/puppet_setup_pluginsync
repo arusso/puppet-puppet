@@ -1,4 +1,8 @@
 #!/bin/env sh
+#
+# Author: Aaron Russo <arusso@berkeley.edu>
+# Desc: Utility to check and update state of puppet's pluginsync setting
+#       without requiring any external modules
 
 ARG1=$1
 

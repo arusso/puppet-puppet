@@ -4,29 +4,58 @@
 #
 # === Parameters:
 #
+# [*dns_alt_names*]
+#
+# (Master only) DNS Alternative Names to use when generating the Puppet master
+# ssl cert
+#
+# [*manifest*]
+#
+# The manifest filepath
+#
 # [*master*]
 #
-# Should we install the master? Default is false.
+# Should we install the puppet master? Default: false
+#
+# [*modulepath*]
+#
+# Array of paths that make up the modulepath.
+#
+# [*pluginsync*]
+#
+# (Agent only) Should we enable pluginsync?
+#
+# [*reports*]
+#
+# (Master only) Determines which report processors our master will use.
+#
+# [*reportfrom*]
+#
+# (Master only) Email address reports will come from if email reports are setup.
+#
+# [*sendmail*]
+#
+# (Master only) Location of sendmail binary on the host (needed for tagmap
+# reports)
+#
+# [*server*]
+#
+# (Agent only) Sets the puppet server name to connect to.
 #
 # [*service*]
 #
 # Should we manage the puppet service(s)? Default is true.
 #
-# [*manifest*]
+# [*tagmap*]
 #
-# Location to manifest file.  Only effective on masters
-#
-# [*modulepath*]
-#
-# Array or colon-separated list of paths where puppet should search for
-# modules.
+# (Master only) specifies the location of the tagmap file
 #
 class puppet (
   $dns_alt_names = undef,
   $manifest = undef,
   $master = undef,
   $modulepath = undef,
-  pluginsync = undef,
+  $pluginsync = undef,
   $reports = undef,
   $reportfrom = undef,
   $sendmail = undef,

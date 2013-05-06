@@ -1,16 +1,7 @@
 # == Class: puppet::master
-# Installs an Open Source puppet master
-# == Dependencies:
-# === Classes:
-#  puppet::master::package
-#  puppet::master::service
-#  puppet::agent::package
 #
-# === Variables:
-#  puppet::modulepath
-#  puppet::manifest
-#  puppet::dns_alt_names
-#  puppet::
+# Installs an Open Source puppet master
+#
 class puppet::master {
   # Install our packages and setup our service
   #

@@ -1,3 +1,17 @@
+# == Class: puppet::agent::service
+#
+# Manages the puppet agent service
+#
+# === Parameters:
+#
+# [*ensure*]
+#
+# Ensure state of the puppet service.  Default is undef (don't manage)
+#
+# [*enable*]
+#
+# Enable state of the puppet service. Default is undef (don't manage)
+#
 class puppet::agent::service (
   $ensure = undef,
   $enable = undef

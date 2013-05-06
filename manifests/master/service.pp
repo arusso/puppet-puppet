@@ -1,8 +1,7 @@
 # == Class: puppet::master::service
+#
 # Controls the puppet master service
-# == Dependencies:
-# === Variables:
-#  $puppet::service
+#
 class puppet::master::service {
   # we assume that if this class is included, that the service should be
   # managed

@@ -1,3 +1,17 @@
+# == Define: puppet::master::environment
+#
+# Sets up a new puppet master environment
+#
+# === Parameters:
+#
+# [*manifest*]
+#
+# Manifest file for this particular environment
+#
+# [*modulepath*]
+#
+# Modulepath for this particular environment
+#
 define puppet::master::environment (
   $manifest = undef,
   $modulepath = undef
