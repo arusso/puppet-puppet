@@ -2,6 +2,14 @@
 #
 # For an initial --pluginsync run, if not already installed
 #
+# === Parameters:
+#
+# [*change_state*]
+#
+# If set to true and pluginsync is configured as disabled in puppet.conf, this
+# will enable it.  Otherwise, default behavior is only to configure and enable
+# pluginsync if it is not already defined.
+#
 class puppet::util::pluginsync (
   $change_state = false
 ) {
@@ -12,7 +20,6 @@ class puppet::util::pluginsync (
     mode   => '0550',
     source => 'puppet:///modules/puppet/puppet_setup_pluginsync',
   }
-
 
   $rc = $change_state ? {
     true    => '1',
