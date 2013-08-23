@@ -17,7 +17,7 @@ This module provides mechanisms to manage your puppet agent and master
   }
 
   # on agents, this could be useful -- sets up pluginsync without needing any
-  # modules
+  # additional modules.
   include puppet::util::pluginsync
 </code></pre>
  
