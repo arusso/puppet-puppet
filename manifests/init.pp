@@ -51,28 +51,24 @@
 # (Master only) specifies the location of the tagmap file
 #
 class puppet (
-  $dns_alt_names = undef,
-  $manifest = undef,
-  $master = undef,
-  $modulepath = undef,
-  $pluginsync = undef,
-  $reports = undef,
-  $reportfrom = undef,
-  $sendmail = undef,
-  $server = undef,
-  $service = undef,
+  $autosign = '',
+  $basemodulepath = '',
+  $default_manifest = '',
+  $dns_alt_names = '',
+  $environmentpath = '',
+  $hiera_config = '',
+  $manifest = '',
+  $master = false,
+  $modulepath = '',
+  $reports = '',
+  $reportfrom = '',
+  $sendmail = '',
+  $server = '',
   $tagmap = undef
 ) {
   # Agent installer
   include puppet::agent
   Class['puppet'] -> Class['puppet::agent']
-
-  # Master installer
-  $master_r = $master ? {
-    undef   => false,
-    default => any2bool($master)
-  }
-  validate_bool( $master_r )
 
   file { '/etc/puppet/puppet.conf':
     ensure  => present,
@@ -83,7 +79,7 @@ class puppet (
     replace => false,
   }
 
-  if $master_r {
+  if any2bool($master) {
     include puppet::master
     Class['puppet'] -> Class['puppet::master']
   }

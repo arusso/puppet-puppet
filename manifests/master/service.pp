@@ -3,16 +3,13 @@
 # Controls the puppet master service
 #
 class puppet::master::service {
-  # we assume that if this class is included, that the service should be
-  # managed
+  if $caller_module_name != $module_name {
+    fail("class ${name} cannot be instantiated outside of ${module_name}")
+  }
 
-  $service_name_r = 'puppetmaster'
-  $service_ensure_r = 'running'
-  $service_enable_r = true
-
-  service { $service_name_r:
-    ensure    => $service_ensure_r,
-    enable    => $service_enable_r,
-    subscribe => Class['puppet::agent::service'],
+  service { 'puppetmaster':
+    ensure    => 'running',
+    enable    => true,
+    subscribe => Class[puppet::agent::service],
   }
 }

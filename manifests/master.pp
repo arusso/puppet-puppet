@@ -21,73 +21,96 @@ class puppet::master {
     require => Class['puppet::master::package'],
   }
 
-  # Set our manifest file
-  #
-  if $puppet::manifest {
-    validate_absolute_path( $manifest )
-    $manifest_r = $manifest }
-  else { $manifest_r = '/etc/puppet/manifests/site.pp' }
-  ini_setting { 'main-manifest':
-    section => 'main',
+  # cleanup settings out of main. we'll put it into the master config
+  ini_setting {
+    'puppet-main-modulepath':
+      ensure  => 'absent',
+      section => 'main',
+      setting => 'modulepath';
+
+    'puppet-main-manifest':
+      ensure  =>  'absent',
+      section => 'main',
+      setting => 'manifest';
+  }
+
+  # configure manifest directive
+  ini_setting { 'puppet-master-manifest':
+    ensure  => ter($puppet::manifest,'',absent,present),
     setting => 'manifest',
-    value   => $manifest_r,
+    value   => $puppet::manifest,
   }
 
-  # Set our modulepath
-  #
-  if $puppet::modulepath { $modulepath_r = $puppet::modulepath }
-  else { $modulepath_r = '/etc/puppet/modules:/opt/puppet/modules' }
-  ini_setting { 'main-modulepath':
-    section => 'main',
+  # configure modulepath directive
+  ini_setting { 'puppet-master-modulepath':
+    ensure  => ter($puppet::modulepath,'',absent,present),
     setting => 'modulepath',
-    value   => $modulepath_r,
+    value   => $puppet::modulepath,
   }
 
-  # Set our dns_alt_names
-  #
-  if is_array( $puppet::dns_alt_names ) {
-    $dns_alt_names_r = join( $puppet::dns_alt_names, ',' )
-  } else {
-    $dns_alt_names_r = $puppet::dns_alt_names
+  # configure dns_alt_names directive
+  $dns_alt_names = is_array($puppet::dns_alt_names) ? {
+    true  => join($puppet::dns_alt_names,','),
+    false => $puppet::dns_alt_names,
   }
-  if $dns_alt_names_r {
-    ini_setting { 'puppet-master-dns_alt_names':
-      setting => 'dns_alt_names',
-      value   => $dns_alt_names_r,
-    }
+  ini_setting { 'puppet-master-dns_alt_names':
+    ensure  => ter($dns_alt_names,'',absent,present),
+    setting => 'dns_alt_names',
+    value   => $dns_alt_names,
   }
 
-  # Set our reports
-  #
-  if is_array( $puppet::reports ) {
-    $reports_r = join ( $puppet::reports , ',' )
-  } else {
-    $reports_r = $puppet::reports
+  # configure our reports directive
+  $reports = is_array( $puppet::reports ) ? {
+    true  => join($puppet::reports,','),
+    false => $reports,
   }
-  if $reports_r {
-    ini_setting { 'puppet-master-reports':
-      setting => 'reports',
-      value   => $reports_r,
-    }
+  ini_setting { 'puppet-master-reports':
+    ensure  => ter($reports,'',absent,present),
+    setting => 'reports',
+    value   => $reports,
   }
 
-  # Set our reportfrom
-  #
-  $reportfrom_r = $puppet::reportfrom
-  if $reportfrom_r {
-    ini_setting { 'puppet-master-reportfrom':
-      setting => 'reportfrom',
-      value   => $reportfrom_r,
-    }
+  # configure our reportfrom directive
+  ini_setting { 'puppet-master-reportfrom':
+    ensure  => ter($puppet::reportfrom,'',absent,present),
+    setting => 'reportfrom',
+    value   => $puppet::reportfrom,
   }
 
-  # Set our tagmap
-  #
-  $tagmap_r = $puppet::tagmap
-  if $tagmap_r {
-    ini_setting { 'puppet-master-tagmap':
-      setting => 'tagmap',
-      value   => $tagmap_r,
-    }
+  # configure our tagmap directive
+  ini_setting { 'puppet-master-tagmap':
+    ensure  => ter($puppet::tagmap,'',absent,present),
+    setting => 'tagmap',
+    value   => $puppet::tagmap,
+  }
+
+  ini_setting { 'puppet-master-default_manifest':
+    ensure  => ter($puppet::default_manifest,'',absent,present),
+    setting => 'default_manifest',
+    value   => $puppet::default_manifest,
+  }
+
+  ini_setting { 'puppet-master-basemodulepath':
+    ensure  => ter($puppet::basemodulepath,'',absent,present),
+    setting => 'basemodulepath',
+    value   => $puppet::basemodulepath,
+  }
+
+  ini_setting { 'puppet-master-hiera_config':
+    ensure  => ter($puppet::hiera_config,'',absent,present),
+    setting => 'hiera_config',
+    value   => $puppet::hiera_config,
+  }
+
+  ini_setting { 'puppet-master-environmentpath':
+    ensure  => ter($puppet::environmentpath,'',absent,present),
+    setting => 'environmentpath',
+    value   => $puppet::environmentpath,
+  }
+
+  ini_setting { 'puppet-master-autosign':
+    ensure  => ter($puppet::autosign,'',absent,present),
+    setting => 'autosign',
+    value   => $puppet::autosign,
   }
 }
